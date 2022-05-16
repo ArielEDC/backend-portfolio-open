@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "app-portfolio-adc.herokuapp.com/")
+@CrossOrigin()
 @RequestMapping("/app")
 @RestController
 public class Controller {
