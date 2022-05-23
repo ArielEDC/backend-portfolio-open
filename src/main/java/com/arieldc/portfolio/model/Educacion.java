@@ -27,6 +27,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Educacion.findByTitulo", query = "SELECT e FROM Educacion e WHERE e.titulo = :titulo"),
     @NamedQuery(name = "Educacion.findByFechaInicio", query = "SELECT e FROM Educacion e WHERE e.fechaInicio = :fechaInicio"),
     @NamedQuery(name = "Educacion.findByFechaFin", query = "SELECT e FROM Educacion e WHERE e.fechaFin = :fechaFin"),
+    @NamedQuery(name = "Educacion.findByImagen", query = "SELECT e FROM Educacion e WHERE e.imagen = :imagen"),
     @NamedQuery(name = "Educacion.findByPersonaid", query = "SELECT e FROM Educacion e WHERE e.personaid = :personaid")})
 public class Educacion implements Serializable {
 
@@ -49,6 +50,9 @@ public class Educacion implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
     
+    @Column(name= "img")
+    private String imagen;
+    
     @JoinColumn(name = "Persona_id", referencedColumnName = "id")
     @ManyToOne
     @JsonIgnoreProperties(value = {"educacionCollection","proyectosCollection", "experienciaLaboralCollection","habilidadesCollection"})
@@ -57,12 +61,13 @@ public class Educacion implements Serializable {
     public Educacion() {
     }
 
-    public Educacion(Integer id, String institucion, String titulo, Date fechaInicio, Date fechaFin, Persona personaid) {
+    public Educacion(Integer id, String institucion, String titulo, Date fechaInicio, Date fechaFin, String imagen, Persona personaid) {
         this.id = id;
         this.institucion = institucion;
         this.titulo = titulo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.imagen = imagen;
         this.personaid = personaid;
     }
 
@@ -104,6 +109,13 @@ public class Educacion implements Serializable {
 
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+    
+    public String getImagen(){
+        return imagen;
+    }
+    public void setImagen(String imagen){
+        this.imagen = imagen;
     }
 
     public Persona getPersonaid() {

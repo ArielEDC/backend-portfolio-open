@@ -28,6 +28,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "ExperienciaLaboral.findByDescripcion", query = "SELECT e FROM ExperienciaLaboral e WHERE e.descripcion = :descripcion"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaInicio", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaInicio = :fechaInicio"),
     @NamedQuery(name = "ExperienciaLaboral.findByFechaFin", query = "SELECT e FROM ExperienciaLaboral e WHERE e.fechaFin = :fechaFin"),
+    @NamedQuery(name = "ExperienciaLaboral.findByImagen", query = "SELECT e FROM ExperienciaLaboral e WHERE e.imagen = :imagen"),
     @NamedQuery(name = "ExperienciaLaboral.findByPersonaid", query = "SELECT e FROM ExperienciaLaboral e WHERE e.personaid = :personaid")})
 public class ExperienciaLaboral implements Serializable {
 
@@ -47,6 +48,8 @@ public class ExperienciaLaboral implements Serializable {
     @Column(name = "fecha_fin")
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
+    @Column(name = "img")
+    private String imagen;
     
     @JoinColumn(name = "Persona_id", referencedColumnName = "id")
     @ManyToOne
@@ -56,13 +59,14 @@ public class ExperienciaLaboral implements Serializable {
     public ExperienciaLaboral() {
     }
 
-    public ExperienciaLaboral(Integer id, String trabajo, String empresa, String descripcion, Date fechaInicio, Date fechaFin, Persona personaid) {
+    public ExperienciaLaboral(Integer id, String trabajo, String empresa, String descripcion, Date fechaInicio, Date fechaFin,String imagen, Persona personaid) {
         this.id = id;
         this.trabajo = trabajo;
         this.empresa = empresa;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.imagen = imagen;
         this.personaid = personaid;
     }
 
@@ -112,6 +116,14 @@ public class ExperienciaLaboral implements Serializable {
 
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+    
+    public String getImagen(){
+        return imagen;
+    }
+    
+    public void setImagen(String imagen){
+        this.imagen = imagen;
     }
 
     public Persona getPersonaid() {
