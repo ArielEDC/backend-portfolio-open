@@ -3,11 +3,14 @@ package com.arieldc.portfolio.security.jwt;
 
 import com.arieldc.portfolio.security.entity.UsuarioPrincipal;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 
 import java.util.Date;
 import java.util.List;
@@ -24,26 +27,37 @@ public class JwtProvider {
     @Value("${jwt.expiration}")
     private int expiration;
 
+
     public String generateToken(Authentication authentication){
         UsuarioPrincipal usuarioPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
         List<String> roles= usuarioPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         return Jwts.builder()
-                .setSubject(usuarioPrincipal.getUsername())
+                .subject(usuarioPrincipal.getUsername())
                 .claim("roles", roles)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret.getBytes())
+                .issuedAt(new Date())
+                .expiration(new Date(new Date().getTime() + expiration * 1000L))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), Jwts.SIG.HS512) //SignatureAlgorithm.HS512, secret.getBytes()
                 .compact();
     }
 
     public String getNombreUsuarioFromToken(String token){
-        return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload().getSubject();
+
+                //Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String token){
+    public Claims validateToken(String token){
         try {
-            Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
-            return true;
+
+            return (Claims) Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                    .build()
+                    .parseSignedClaims(token);
+
         }catch (MalformedJwtException e){
             
             logger.error("token mal formado");
@@ -53,9 +67,9 @@ public class JwtProvider {
             logger.error("token expirado");
         }catch (IllegalArgumentException e){
             logger.error("token vacío");
-        }catch (SignatureException e){
+        }catch (Exception e){
             logger.error("fail en la firma");
         }
-        return false;
+        return null;
     }
 }
