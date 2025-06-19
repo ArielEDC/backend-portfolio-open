@@ -2,9 +2,12 @@
 package com.arieldc.portfolio.security.entity;
 
 import com.arieldc.portfolio.security.enums.RolNombre;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+
+
+
 
 @Entity
 public class Rol {

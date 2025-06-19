@@ -11,6 +11,7 @@ import com.arieldc.portfolio.security.enums.RolNombre;
 import com.arieldc.portfolio.security.jwt.JwtProvider;
 import com.arieldc.portfolio.security.service.RolService;
 import com.arieldc.portfolio.security.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 import java.util.HashSet;
 import java.util.Set;
 
