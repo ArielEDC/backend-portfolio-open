@@ -9,6 +9,7 @@ import com.arieldc.portfolio.security.entity.Rol;
 import com.arieldc.portfolio.security.entity.Usuario;
 import com.arieldc.portfolio.security.enums.RolNombre;
 import com.arieldc.portfolio.security.jwt.JwtProvider;
+import com.arieldc.portfolio.security.repository.UsuarioRepository;
 import com.arieldc.portfolio.security.service.RolService;
 import com.arieldc.portfolio.security.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +50,7 @@ public class AuthController {
     JwtProvider jwtProvider;
 
     @PostMapping("/nuevo")
-    public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
+    public ResponseEntity<JwtDto> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Mensaje("campos mal puestos o email inválido"), HttpStatus.BAD_REQUEST);
         if(usuarioService.existsByNombreUsuario(nuevoUsuario.getNombreUsuario()))
@@ -74,7 +76,7 @@ public class AuthController {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getNombreUsuario(), loginUsuario.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
-        /*UserDetails userDetails = (UserDetails)authentication.getPrincipal();*/
+        //UserDetails userDetails = UsuarioRepository.findByNombreUsuario(loginUsuario.getNombreUsuario()).orElseThrow();
         JwtDto jwtDto = new JwtDto(jwt);
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }

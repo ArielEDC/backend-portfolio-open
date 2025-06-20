@@ -45,18 +45,17 @@ public class JwtProvider {
                 .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .build()
                 .parseSignedClaims(token)
-                .getPayload().getSubject();
-
-                //Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
+                .getPayload()
+                .getSubject();
     }
 
-    public Claims validateToken(String token){
+    public boolean validateToken(String token){
         try {
-
-            return (Claims) Jwts.parser()
+            Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
                     .build()
                     .parseSignedClaims(token);
+            return true;
 
         }catch (MalformedJwtException e){
             
@@ -70,6 +69,6 @@ public class JwtProvider {
         }catch (Exception e){
             logger.error("fail en la firma");
         }
-        return null;
+        return false;
     }
 }
