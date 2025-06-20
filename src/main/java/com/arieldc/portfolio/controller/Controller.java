@@ -47,6 +47,14 @@ public class Controller {
     
     
     // Persona
+    @GetMapping("/persona/ver/{id}")
+    public Persona verPersona(@PathVariable int id){
+        return persoServ.verPersona(id);
+    }
+    @GetMapping("/persona/ver")
+    public List<Persona> verPersonas(){
+        return persoServ.verPersonas();
+    }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/persona/nuevo")
     public void nuevaPersona(@RequestBody Persona per){
@@ -57,14 +65,7 @@ public class Controller {
     public void editarPersona(@RequestBody Persona per){
         persoServ.editarPersona(per);
     }
-    @GetMapping("/persona/ver/{id}")
-    public Persona verPersona(@PathVariable int id){
-        return persoServ.verPersona(id);
-    }
-    @GetMapping("/persona/ver")
-    public List<Persona> verPersonas(){
-        return persoServ.verPersonas();
-    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/persona/borrar/{id}")
     public void eliminarPersona(@PathVariable int id){

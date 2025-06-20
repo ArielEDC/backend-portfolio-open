@@ -54,7 +54,16 @@ public class SecurityConfig {
                 //.cors(AbstractHttpConfigurer::disable)
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
-                    authorize.requestMatchers("/auth/**").permitAll();
+                    authorize.requestMatchers(
+                            "/auth/**",
+                            "/app/persona/ver/**",
+                            "/app/habilidad/ver/**",
+                            "/app/subhabilidad/ver/**",
+                            "/app/proyecto/ver/**",
+                            "/app/educacion/ver/**",
+                            "/app/experiencia/ver/**",
+                            "/app/contacto/nuevo"
+                            ).permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
