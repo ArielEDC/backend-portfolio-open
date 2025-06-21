@@ -57,15 +57,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers(HttpMethod.OPTIONS).permitAll();
+                    authorize.requestMatchers(HttpMethod.GET).permitAll();
                     authorize.requestMatchers(
                             "/auth/**",
-                            "/app/persona/ver/**",
-                            "/app/habilidad/ver/**",
-                            "/app/subhabilidad/ver/**",
-                            "/app/proyecto/ver/**",
-                            "/app/educacion/ver/**",
-                            "/app/experiencia/ver/**",
-                            "/app/contacto/nuevo",
                             "/error"
                             ).permitAll();
                     authorize.anyRequest().authenticated();
